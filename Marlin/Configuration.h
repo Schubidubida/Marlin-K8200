@@ -20,6 +20,33 @@
  *
  */
 
+// BY CJR K8200 date unknown / Current as of 2024-12-25
+// 		// #define K8200_VM8201
+//		#define STRING_CONFIG_H_AUTHOR "(K8200, @CONSULitAS, CJR)" // Who made the changes.
+//		#define TEMP_BED_RESIDENCY_TIME 5   // (seconds)
+//		#define TEMP_BED_HYSTERESIS 1       // (degC) range of +/- temperatures considered "close" to the target one
+//		//#define  DEFAULT_Kp 24.29
+//		//#define  DEFAULT_Ki 1.58
+//		//#define  DEFAULT_Kd 93.51
+//		// Vellemann K8200 Unknown J (?) HotEnd, autotuned by CJR
+//		#define  DEFAULT_Kp 37.31
+//		#define  DEFAULT_Ki 5.35
+//		#define  DEFAULT_Kd 65.10
+//		//#define PIDTEMPBED
+//		#define BED_LIMIT_SWITCHING
+
+//
+//
+// By CJR K8200 2019-07-06
+//		DEFAULT_XJERK 1.0 --> 2.0
+//		DEFAULT_YJERK 1.0 --> 2.0
+//
+// By CJR K8200 2019-07-06
+//
+//		Z_HOMING_HEIGHT 4 --> 10 
+//		No #define K8200_VM8201
+//		TEMP_BED_RESIDENCY_TIME 10 --> 5
+
 /**
  * Configuration.h
  *
@@ -61,7 +88,7 @@
  */
 
 // VM8201 Display unit
-#define K8200_VM8201
+// #define K8200_VM8201
 // K8204 Z axis upgrade rod and coupler -> TODO
 // #define K8200_K8204
 // K8203 direct drive extruder -> TODO
@@ -102,7 +129,7 @@
 // User-specified version info of this build to display in [Pronterface, etc] terminal window during
 // startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
 // build by the user have been successfully uploaded into firmware.
-#define STRING_CONFIG_H_AUTHOR "(K8200, @CONSULitAS)" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "(K8200, @CONSULitAS, CJR)" // Who made the changes.
 #define SHOW_BOOTSCREEN
 #define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
 #define STRING_SPLASH_LINE2 WEBSITE_URL         // will be shown during bootup in line 2
@@ -278,8 +305,8 @@
 #define TEMP_WINDOW     1       // (degC) Window around target to start the residency timer x degC early.
 
 // Bed temperature must be close to target for this long before M190 returns success
-#define TEMP_BED_RESIDENCY_TIME 10  // (seconds)
-#define TEMP_BED_HYSTERESIS 3       // (degC) range of +/- temperatures considered "close" to the target one
+#define TEMP_BED_RESIDENCY_TIME 5   // (seconds)
+#define TEMP_BED_HYSTERESIS 1       // (degC) range of +/- temperatures considered "close" to the target one
 #define TEMP_BED_WINDOW     1       // (degC) Window around target to start the residency timer x degC early.
 
 // The minimal temperature defines the temperature below which the heater will not be enabled It is used
@@ -337,9 +364,15 @@
   //#define  DEFAULT_Kd 440
 
   // Vellemann K8200 Extruder - calculated with PID Autotune and tested
-  #define  DEFAULT_Kp 24.29
-  #define  DEFAULT_Ki 1.58
-  #define  DEFAULT_Kd 93.51
+  //#define  DEFAULT_Kp 24.29
+  //#define  DEFAULT_Ki 1.58
+  //#define  DEFAULT_Kd 93.51
+
+  // Vellemann K8200 Unknown J (?) HotEnd, autotuned by CJR
+  #define  DEFAULT_Kp 37.31
+  #define  DEFAULT_Ki 5.35
+  #define  DEFAULT_Kd 65.10
+
 #endif // PIDTEMP
 
 //===========================================================================
@@ -354,9 +387,9 @@
 // If your configuration is significantly different than this and you don't understand the issues involved, you probably
 // shouldn't use bed PID until someone else verifies your hardware works.
 // If this is enabled, find your own PID constants below.
-#define PIDTEMPBED
+//#define PIDTEMPBED
 
-//#define BED_LIMIT_SWITCHING
+#define BED_LIMIT_SWITCHING
 
 // This sets the max power delivered to the bed, and replaces the HEATER_BED_DUTY_CYCLE_DIVIDER option.
 // all forms of bed control obey this (PID, bang-bang, bang-bang with hysteresis)
@@ -493,12 +526,12 @@
  * Default Axis Steps Per Unit (steps/mm)
  * Override with M92
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 64.25, 64.25, 2560, 600}  // for K8200
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 64.25, 64.25, 2133.3333, 600}  // for K8200 WITH 1.5 mm SPINDLE (CJR)
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  */
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 50 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -506,7 +539,7 @@
  *
  * Maximum start speed for accelerated moves: { X, Y, Z, E }
  */
-#define DEFAULT_MAX_ACCELERATION      { 9000, 9000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 1000, 1000, 100, 20000 }
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -516,9 +549,9 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  1000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_ACCELERATION          500     // X, Y, Z and E acceleration for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
+#define DEFAULT_TRAVEL_ACCELERATION   2000    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
  * Default Jerk (mm/s)
@@ -527,8 +560,8 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-#define DEFAULT_XJERK                 20.0
-#define DEFAULT_YJERK                 20.0
+#define DEFAULT_XJERK                  2.0
+#define DEFAULT_YJERK                  2.0
 #define DEFAULT_ZJERK                  0.4
 #define DEFAULT_EJERK                  5.0
 
@@ -706,7 +739,7 @@
 
 // @section homing
 // K8200: it is usual to have clamps for the glass plate on the heatbed
-#define Z_HOMING_HEIGHT 4   // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_HOMING_HEIGHT 10   // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
                             // Be sure you have this distance over your Z_MAX_POS in case.
 
 // ENDSTOP SETTINGS:
@@ -725,9 +758,9 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 200
-#define Y_MAX_POS 200
-#define Z_MAX_POS 200
+#define X_MAX_POS 215
+#define Y_MAX_POS 205
+#define Z_MAX_POS 170
 
 //===========================================================================
 //========================= Filament Runout Sensor ==========================
